@@ -6,6 +6,8 @@
 
 set -e
 
+. ./common.sh
+
 info_print "*** CLEANUP BEGIN ***"
 
 if [ "$(id -u)" = "0" ] ; then

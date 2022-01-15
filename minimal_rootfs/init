@@ -43,7 +43,7 @@ if [ ! "$key" = "" ] ; then
   export PID1_SHELL=true
 
   # Interactive shell with controlling tty as PID 1.
-  exec setsid cttyhack sh
+  exec setsid cttyhack bash
 fi
 
 # Create new mountpoint in RAM, make it our new root location and overlay it

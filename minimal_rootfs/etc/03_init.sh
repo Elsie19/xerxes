@@ -52,7 +52,7 @@ else
     exec sh
   else
     # Interactive shell with controlling tty as PID 1.
-    exec setsid cttyhack sh
+    exec setsid cttyhack bash
   fi
 fi
 
