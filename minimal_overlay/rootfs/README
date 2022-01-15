@@ -1,0 +1,10 @@
+This guide will teach you how to install Xerxes Linux onto a hard-drive
+
+Step 1) Unmount your drive of choice with
+  umount /dev/sda
+
+Step 2) Create a mount point to install to
+  mkdir -p /tmp/mnt/inst
+
+Step 3) Mount your install point to your drive
+  mount /tmp/mnt/inst /dev/sda

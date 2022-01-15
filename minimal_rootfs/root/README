@@ -1,0 +1,6 @@
+Hello and welcome to Xerxes! There are a couple things to know before getting started.
+
+If you want to connect to the internet, run
+	/etc/autorun/20_network.sh
+
+There is currently no method of installing Xerxes onto a hard drive, but that's being worked on ;)

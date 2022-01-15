@@ -1,0 +1,40 @@
+RETVAL=0
+
+. /etc/init.d/functions
+
+network_start() {
+ /etc/autorun/20_network.sh
+ RETVAL=$?
+}
+
+network_stop() {
+ killall udhcpc
+ RETVAL=$?
+}
+
+network_status() {
+ ip addr
+ RETVAL=$?
+}
+
+case "$1" in
+
+ start)
+network_start
+;;
+
+ stop)
+network_stop
+;;
+
+ status)
+network_status
+;;
+
+ *)
+echo "Usage: $0 {start|stop|restart|status}"
+exit 1
+;;
+esac
+
+exit $RETVAL
