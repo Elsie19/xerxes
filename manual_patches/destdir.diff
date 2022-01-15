@@ -1,0 +1,79 @@
+--- work/overlay/sysvinit/sysvinit-2.99/src/Makefile	2022-01-15 09:41:53.436286541 -0600
++++ manual_patches/Makefile.sysvinit	2022-01-14 20:05:51.780610680 -0600
+@@ -80,13 +80,9 @@
+   INSTALL_DATA	= install -m 644
+ endif
+ INSTALL_DIR	= install -m 755 -d
+-MANDIR		= /usr/share/man
++MANDIR		= $(DESTDIR)/usr/share/man
+ 
+ ifeq ($(WITH_SELINUX),yes)
+-  SELINUX_DEF	=  -DWITH_SELINUX
+-  INITLIBS	+= -lselinux
+-  SULOGINLIBS	= -lselinux	
+-else
+   SELINUX_DEF	=
+   INITLIBS	=
+   SULOGINLIBS	=
+@@ -196,41 +192,43 @@
+ install:	all
+ 		$(INSTALL_DIR) $(ROOT)/bin/ $(ROOT)/sbin/
+ 		$(INSTALL_DIR) $(ROOT)/usr/bin/
++		mkdir -p /home/henry/Projects/xerxes/minimal_linux_live_15-Dec-2019/work/overlay/sysvinit/sysvinit_installed/sbin
++		mkdir -p /home/henry/Projects/xerxes/minimal_linux_live_15-Dec-2019/work/overlay/sysvinit/sysvinit_installed/bin
+ 		for i in $(BIN); do \
+-			$(INSTALL_EXEC) $$i $(ROOT)/bin/ ; \
++			$(INSTALL_EXEC) $$i $(DESTDIR)/bin/ ; \
+ 		done
+ 		for i in $(SBIN); do \
+-			$(INSTALL_EXEC) $$i $(ROOT)/sbin/ ; \
++			$(INSTALL_EXEC) $$i $(DESTDIR)/sbin/ ; \
+ 		done
+ 		for i in $(USRBIN); do \
+-			$(INSTALL_EXEC) $$i $(ROOT)/usr/bin/ ; \
++			$(INSTALL_EXEC) $$i $(DESTDIR)/usr/bin/ ; \
+ 		done
+ 		# $(INSTALL_DIR) $(ROOT)/etc/
+-		$(INSTALL_DIR) $(ROOT)/etc/inittab.d
++		$(INSTALL_DIR) $(DESTDIR)/etc/inittab.d
+ 		# $(INSTALL_EXEC) ../doc/initscript.sample $(ROOT)/etc/
+-		ln -sf halt $(ROOT)/sbin/reboot
+-		ln -sf halt $(ROOT)/sbin/poweroff
+-		ln -sf init $(ROOT)/sbin/telinit
++		ln -sf halt $(DESTDIR)/sbin/reboot
++		ln -sf halt $(DESTDIR)/sbin/poweroff
++		ln -sf init $(DESTDIR)/sbin/telinit
+ 		#ln -sf /sbin/killall5 $(ROOT)/bin/pidof
+ 		#if [ ! -f $(ROOT)/usr/bin/lastb ]; then \
+ 		#	ln -sf last $(ROOT)/usr/bin/lastb; \
+ 		#fi
+-		$(INSTALL_DIR) $(ROOT)/usr/include/
+-		$(INSTALL_DATA) initreq.h $(ROOT)/usr/include/
+-		$(INSTALL_DIR) $(ROOT)$(MANDIR)/man1/
+-		$(INSTALL_DIR) $(ROOT)$(MANDIR)/man5/
+-		$(INSTALL_DIR) $(ROOT)$(MANDIR)/man8/
++		$(INSTALL_DIR) $(DESTDIR)/usr/include/
++		$(INSTALL_DATA) initreq.h $(DESTDIR)/usr/include/
++		$(INSTALL_DIR) $(DESTDIR)$(MANDIR)/man1/
++		$(INSTALL_DIR) $(DESTDIR)$(MANDIR)/man5/
++		$(INSTALL_DIR) $(DESTDIR)$(MANDIR)/man8/
+ 		for man in $(MAN1); do \
+-			$(INSTALL_DATA) ../man/$$man $(ROOT)$(MANDIR)/man1/; \
+-			sed -i "1{ $(MANDB); }" $(ROOT)$(MANDIR)/man1/$$man ; \
++			$(INSTALL_DATA) ../man/$$man $(DESTDIR)$(MANDIR)/man1/; \
++			sed -i "1{ $(MANDB); }" $(DESTDIR)$(MANDIR)/man1/$$man ; \
+ 		done
+ 		for man in $(MAN5); do \
+-			$(INSTALL_DATA) ../man/$$man $(ROOT)$(MANDIR)/man5/; \
+-			sed -i "1{ $(MANDB); }" $(ROOT)$(MANDIR)/man5/$$man ; \
++			$(INSTALL_DATA) ../man/$$man $(DESTDIR)$(MANDIR)/man5/; \
++			sed -i "1{ $(MANDB); }" $(DESTDIR)$(MANDIR)/man5/$$man ; \
+ 		done
+ 		for man in $(MAN8); do \
+-			$(INSTALL_DATA) ../man/$$man $(ROOT)$(MANDIR)/man8/; \
+-			sed -i "1{ $(MANDB); }" $(ROOT)$(MANDIR)/man8/$$man ; \
++			$(INSTALL_DATA) ../man/$$man $(DESTDIR)$(MANDIR)/man8/; \
++			sed -i "1{ $(MANDB); }" $(DESTDIR)$(MANDIR)/man8/$$man ; \
+ 		done
+ ifeq ($(ROOT),)
+ 		#

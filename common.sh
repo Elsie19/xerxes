@@ -20,6 +20,7 @@ ROOTFS=$WORK_DIR/rootfs
 OVERLAY_ROOTFS=$WORK_DIR/overlay_rootfs
 ISOIMAGE=$WORK_DIR/isoimage
 ISOIMAGE_OVERLAY=$WORK_DIR/isoimage_overlay
+PATCHES_DIR=/home/henry/Projects/xerxes/minimal_linux_live_15-Dec-2019/manual_patches
 
 # This function reads property from the main '.config' file.
 #
@@ -37,10 +38,10 @@ read_property() (
 
   if [ ! "$prop_name" = "" ] ; then
     # Search in the main '.config' file.
-    prop_value="$(grep -i ^${prop_name}= $CONFIG | cut -f2- -d'=' | xargs)"
+    prop_value="$(grep -i ^${prop_name}= "$CONFIG" | cut -f2- -d'=' | xargs)"
   fi
 
-  echo $prop_value
+  echo "$prop_value"
 )
 
 # Read commonly used properties from the main '.config' file.

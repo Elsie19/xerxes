@@ -9,7 +9,7 @@ cat << CEOF > minimal_overlay/rootfs/etc/autorun/99_autoshutdown.sh
 # This script shuts down the OS automatically.
 sleep 10 && poweroff &
 
-echo "  Minimal Linux Live will shut down in 10 seconds."
+echo "  Xerxes Linux will shut down in 10 seconds."
 
 CEOF
 chmod +x minimal_overlay/rootfs/etc/autorun/99_autoshutdown.sh
@@ -25,30 +25,30 @@ LABEL operatingsystem
 CEOF
 
 ./repackage.sh
-qemu-system-x86_64 -m 256M -cdrom minimal_linux_live.iso -boot d -localtime -nographic &
+qemu-system-x86_64 -m 256M -cdrom xerxes.iso -boot d -localtime -nographic &
 
 sleep 5
-if [ "`ps -ef | grep -i [q]emu-system`" = "" ] ; then
-  echo "`date` | !!! FAILURE !!! Minimal Linux Live is not running in QEMU."
+if [ "$(ps -ef | grep -i "[q]emu-system")" = "" ] ; then
+  info_print "$(date) | !!! FAILURE !!! Xerxes Linux is not running in QEMU."
   exit 1
 else
-  echo "`date` | Minimal Linux Live is running in QEMU. Waiting for automatic shutdown."
+  info_print "$(date) | Xerxes Linux is running in QEMU. Waiting for automatic shutdown."
 fi
 
 RETRY=10
 while [ ! "$RETRY" = "0" ] ; do
-  echo "`date` | Countdown: $RETRY"
-  if [ "`ps -ef | grep -i [q]emu-system`" = "" ] ; then
+  info_print "$(date) | Countdown: $RETRY"
+  if [ "$(ps -ef | grep -i "[q]emu-system")" = "" ] ; then
     break
   fi
   sleep 30
   RETRY=$(($RETRY - 1))
 done
 
-if [ "`ps -ef | grep -i [q]emu-system`" = "" ] ; then
-  echo "`date` | Minimal Linux Live is not running in QEMU."
+if [ "$(ps -ef | grep -i "[q]emu-system")" = "" ] ; then
+  info_print "$(date) | Xerxes Linux is not running in QEMU."
 else
-  echo "`date` | !!! FAILURE !!! Minimal Linux Live is still running in QEMU."
+  info_print "$(date) | !!! FAILURE !!! Xerxes Linux is still running in QEMU."
   exit 1
 fi
 
@@ -56,12 +56,12 @@ cat << CEOF
 
   ##################################################################
   #                                                                #
-  #  QEMU test passed. Clean manually the affected MLL artifacts.  #
+  # QEMU test passed. Clean manually the affected Xerxes artifacts #
   #                                                                #
   ##################################################################
 
 CEOF
 
-echo "`date` | *** MLL QEMU test - END ***"
+info_print "$(date) | Xerxes QEMU test - END ***"
 
 set +e

@@ -21,7 +21,9 @@ rm -rf $DEST_DIR
 echo "Building '$BUNDLE_NAME'."
 wget -q https://www.linuxfromscratch.org/patches/lfs/11.0/sysvinit-2.99-consolidated-1.patch
 patch -Np1 -i sysvinit-2.99-consolidated-1.patch
-cp -rf ../../../manual_patches/Makefile.sysvinit src/Makefile
+cd src
+patch -i ../../../../../manual_patches/destdir.diff
+cd -
 make -j3
 
 echo "Installing '$BUNDLE_NAME'."
