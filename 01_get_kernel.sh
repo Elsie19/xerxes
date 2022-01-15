@@ -5,21 +5,21 @@ set -e
 # Load common properties and functions in the current script.
 . ./common.sh
 
-echo "*** GET KERNEL BEGIN ***"
+info_print "*** GET KERNEL BEGIN ***"
 
 # Read the 'KERNEL_SOURCE_URL' property from '.config'.
-DOWNLOAD_URL=`read_property KERNEL_SOURCE_URL`
+DOWNLOAD_URL="$(read_property KERNEL_SOURCE_URL)"
 
 # Grab everything after the last '/' character.
 ARCHIVE_FILE=${DOWNLOAD_URL##*/}
 
 # Download kernel source archive in the 'source' directory.
-download_source $DOWNLOAD_URL $SOURCE_DIR/$ARCHIVE_FILE
+download_source "$DOWNLOAD_URL" "$SOURCE_DIR"/"$ARCHIVE_FILE"
 
 # Extract the kernel sources in the 'work/kernel' directory.
-extract_source $SOURCE_DIR/$ARCHIVE_FILE kernel
+extract_source "$SOURCE_DIR"/"$ARCHIVE_FILE" kernel
 
 # We go back to the main MLL source folder.
-cd $SRC_DIR
+cd "$SRC_DIR"
 
-echo "*** GET KERNEL END ***"
+info_print "*** GET KERNEL END ***"

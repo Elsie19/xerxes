@@ -23,19 +23,19 @@ uefi() {
 
 # Generate ISO image for BIOS based systems.
 bios() {
-  cd $ISOIMAGE
+  cd "$ISOIMAGE"
 
   # Now we generate 'hybrid' ISO image file which can also be used on
   # USB flash drive, e.g. 'dd if=minimal_linux_live.iso of=/dev/sdb'.
   xorriso -as mkisofs \
-    -isohybrid-mbr $WORK_DIR/syslinux/syslinux-*/bios/mbr/isohdpfx.bin \
+    -isohybrid-mbr "$WORK_DIR"/syslinux/syslinux-*/bios/mbr/isohdpfx.bin \
     -c boot/syslinux/boot.cat \
     -b boot/syslinux/isolinux.bin \
       -no-emul-boot \
       -boot-load-size 4 \
       -boot-info-table \
-    -o $SRC_DIR/xerxes.iso \
-    $ISOIMAGE
+    -o "$SRC_DIR"/xerxes.iso \
+    "$ISOIMAGE"
 }
 
 # Generate ISO image for both BIOS and UEFI based systems.
@@ -57,16 +57,16 @@ both() {
   $ISOIMAGE
 }
 
-echo "*** GENERATE ISO BEGIN ***"
+info_print "*** GENERATE ISO BEGIN ***"
 
-if [ ! -d $ISOIMAGE ] ; then
-  echo "Cannot locate ISO image work folder. Cannot continue."
+if [ ! -d "$ISOIMAGE" ] ; then
+  info_print "Cannot locate ISO image work folder. Cannot continue."
   exit 1
 fi
 
 # Read the 'FIRMWARE_TYPE' property from '.config'
-FIRMWARE_TYPE=`read_property FIRMWARE_TYPE`
-echo "Firmware type is '$FIRMWARE_TYPE'."
+FIRMWARE_TYPE="$(read_property FIRMWARE_TYPE)"
+info_print "Firmware type is '$FIRMWARE_TYPE'."
 
 case $FIRMWARE_TYPE in
   bios)
@@ -82,21 +82,21 @@ case $FIRMWARE_TYPE in
     ;;
 
   *)
-    echo "Firmware type '$FIRMWARE_TYPE' is not recognized. Cannot continue."
+    info_print "Firmware type '$FIRMWARE_TYPE' is not recognized. Cannot continue."
     exit 1
     ;;
 esac
 
-cd $SRC_DIR
+cd "$SRC_DIR"
 
 cat << CEOF
 
   #################################################################
   #                                                               #
-  #  ISO image file 'minimal_linux_live.iso' has been generated.  #
+  #        ISO image file 'xerxes.iso' has been generated.        #
   #                                                               #
   #################################################################
 
 CEOF
 
-echo "*** GENERATE ISO END ***"
+info_print "*** GENERATE ISO END ***"

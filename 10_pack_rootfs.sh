@@ -5,20 +5,20 @@ set -e
 # Load common properties and functions in the current script.
 . ./common.sh
 
-echo "*** PACK ROOTFS BEGIN ***"
+info_print "*** PACK ROOTFS BEGIN ***"
 
-echo "Packing initramfs. This may take a while."
+info_print "Packing initramfs. This may take a while."
 
 # Remove the old 'initramfs' archive if it exists.
-rm -f $WORK_DIR/rootfs.cpio.xz
+rm -f "$WORK_DIR"/rootfs.cpio.xz
 
-cd $ROOTFS
+cd "$ROOTFS"
 
 # Packs the current 'initramfs' folder structure in 'cpio.xz' archive.
-find . | cpio -R root:root -H newc -o | xz -9 --check=none > $WORK_DIR/rootfs.cpio.xz
+find . | cpio -R root:root -H newc -o | xz -9 --check=none > "$WORK_DIR"/rootfs.cpio.xz
 
-echo "Packing of initramfs has finished."
+info_print "Packing of initramfs has finished."
 
-cd $SRC_DIR
+cd "$SRC_DIR"
 
-echo "*** PACK ROOTFS END ***"
+info_print "*** PACK ROOTFS END ***"

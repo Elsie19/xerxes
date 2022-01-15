@@ -7,35 +7,35 @@ set -e
 
 init() {
   # Remove the old ISO generation area if it exists.
-  echo "Removing old ISO image work area. This may take a while."
-  rm -rf $ISOIMAGE
+  info_print "Removing old ISO image work area. This may take a while."
+  rm -rf "$ISOIMAGE"
 
-  echo "Preparing new ISO image work area."
-  mkdir -p $ISOIMAGE
+  info_print "Preparing new ISO image work area."
+  mkdir -p "$ISOIMAGE"
 }
 
 prepare_mll_bios() {
   # This is the folder where we keep legacy BIOS boot artifacts.
-  mkdir -p $ISOIMAGE/boot
+  mkdir -p "$ISOIMAGE"/boot
 
   # Now we copy the kernel.
-  cp $KERNEL_INSTALLED/kernel \
-    $ISOIMAGE/boot/kernel.xz
+  cp "$KERNEL_INSTALLED"/kernel \
+    "$ISOIMAGE"/boot/kernel.xz
 
   # Now we copy the root file system.
-  cp $WORK_DIR/rootfs.cpio.xz \
-    $ISOIMAGE/boot/rootfs.xz
+  cp "$WORK_DIR"/rootfs.cpio.xz \
+    "$ISOIMAGE"/boot/rootfs.xz
 }
 
 prepare_overlay() {
   # Now we copy the overlay content if it exists.
-  if [ -d $ISOIMAGE_OVERLAY \
-    -a ! "`ls $ISOIMAGE_OVERLAY`" = "" ] ; then
+  if [ -d "$ISOIMAGE_OVERLAY" \
+    -a ! "$(ls "$ISOIMAGE_OVERLAY")" = "" ] ; then
 
-    echo "The ISO image will have overlay structure."
-    cp -r $ISOIMAGE_OVERLAY/* $ISOIMAGE
+    info_print "The ISO image will have overlay structure."
+    cp -r "$ISOIMAGE_OVERLAY"/* "$ISOIMAGE"
   else
-    echo "The ISO image will have no overlay structure."
+    info_print "The ISO image will have no overlay structure."
   fi
 }
 
@@ -50,18 +50,18 @@ prepare_boot_bios() {
   # you may not end up with UEFI shell even if your system supports it.
   # In this case MLL will not boot and you will end up with some kind of
   # UEFI error message.
-  cp -r $SRC_DIR/minimal_boot/bios/* \
-    $ISOIMAGE
+  cp -r "$SRC_DIR"/minimal_boot/bios/* \
+    "$ISOIMAGE"
 
   # Find the Syslinux build directory.
-  WORK_SYSLINUX_DIR=`ls -d $WORK_DIR/syslinux/syslinux-*`
+  WORK_SYSLINUX_DIR="$(ls -d "$WORK_DIR"/syslinux/syslinux-*)"
 
   # Copy the precompiled files 'isolinux.bin' and 'ldlinux.c32'. These files
   # are used by Syslinux during the legacy BIOS boot process.
-  mkdir -p $ISOIMAGE/boot/syslinux
-  cp $WORK_SYSLINUX_DIR/bios/core/isolinux.bin \
-    $ISOIMAGE/boot/syslinux
-  cp $WORK_SYSLINUX_DIR/bios/com32/elflink/ldlinux/ldlinux.c32 \
+  mkdir -p "$ISOIMAGE"/boot/syslinux
+  cp "$WORK_SYSLINUX_DIR"/bios/core/isolinux.bin \
+    "$ISOIMAGE"/boot/syslinux
+  cp "$WORK_SYSLINUX_DIR"/bios/com32/elflink/ldlinux/ldlinux.c32 \
     $ISOIMAGE/boot/syslinux
 }
 
@@ -69,7 +69,7 @@ prepare_boot_bios() {
 # sections 13.3.1.x and 13.3.2.x.
 prepare_boot_uefi() {
   # Find the build architecture based on the Busybox executable.
-  BUSYBOX_ARCH=$(file $ROOTFS/bin/busybox | cut -d' ' -f3)
+  BUSYBOX_ARCH="$(file "$ROOTFS"/bin/busybox | cut -d' ' -f3)"
 
   # Determine the proper UEFI configuration. The default image file
   # names are described in UEFI specification 2.7, section 3.5.1.1.
@@ -166,11 +166,11 @@ CEOF
   fi
 }
 
-echo "*** PREPARE ISO BEGIN ***"
+info_print "*** PREPARE ISO BEGIN ***"
 
 # Read the 'FIRMWARE_TYPE' property from '.config'
-FIRMWARE_TYPE=`read_property FIRMWARE_TYPE`
-echo "Firmware type is '$FIRMWARE_TYPE'."
+FIRMWARE_TYPE="$(read_property FIRMWARE_TYPE)"
+info_print "Firmware type is '$FIRMWARE_TYPE'."
 
 case $FIRMWARE_TYPE in
   bios)
@@ -197,12 +197,12 @@ case $FIRMWARE_TYPE in
     ;;
 
   *)
-    echo "Firmware type '$FIRMWARE_TYPE' is not recognized. Cannot continue."
+    info_print "Firmware type '$FIRMWARE_TYPE' is not recognized. Cannot continue."
     exit 1
     ;;
 esac
 
 
-cd $SRC_DIR
+cd "$SRC_DIR"
 
-echo "*** PREPARE ISO END ***"
+info_print "*** PREPARE ISO END ***"
